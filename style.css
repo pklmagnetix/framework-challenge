@@ -1,0 +1,50 @@
+body{
+    margin:20px;
+    background-color: lightgrey;
+}
+.result{
+    padding: 5px 10px;
+    background-color: #f2f2f2;
+    animation: fade-in .5s;
+    margin-bottom: 15px;
+}
+.result-list{
+    display: inline-block;
+    padding: 0;
+    width: 300px;
+    float: left;;
+}
+.result-list ul{
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+@keyframes fade-in {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+.result-list li,
+.movie-details,
+.formWrap{
+    background-color: #f2f2f2;
+    animation: fade-in .5s;
+}
+.result-list li{
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-bottom: 1px;
+}
+.result-list li:hover{
+    background-color: #e8e8e8;
+}
+.movie-details,
+.formWrap{
+    padding: 15px;
+    margin-left: 320px;
+    word-break: break-all;
+    margin-bottom: 10px;
+}
+.formWrap input{
+    margin-bottom: 1em;
+    margin-right: 1em;
+}
