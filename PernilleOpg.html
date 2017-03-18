@@ -6,15 +6,52 @@
 	<meta charset="utf-8">
 	<title>Pernille JS Framework opgave</title>
 	<link rel="stylesheet" type="text/css" href="style.css">
+	<script type="text/javascript" src="vue.js"></script>
 </head>
 <body>
 	<div id="app">
-		<h1>Title</h1>
+		<div class="result">
+			<span>Filter by category: </span>
+			<select>
+				<option> {{ option }}</option>
+			</select>
+		</div>
+
+		<div class="result-list">
+			<ul>
+				<li v-for="movie in movies">
+					{{ movie.title }}
+				</li>
+			</ul>
+		</div>
+
+		<div class="formWrap">
+			<form>
+				<input type="email" name="user" placeholder="E-mail">
+				<button type="submit">Send</button>
+				<div>Send a movie to an Email</div>
+			</form>
+			
+		</div>
 	</div>
+
 
 <script>
 	
-	document.getElementById("app").innerHTML = "<div class='result'><span>Filter by category</span><select></select></div>";
+	new Vue({
+	  el: '#app',
+	  data: {
+
+	  	option: "text",
+	  	movies: [
+	      { title: 'Learn JavaScript' },
+	      { title: 'Learn Vue' },
+	      { title: 'Build something awesome' }
+	    ]
+    }
+  
+})
+	//document.getElementById("app").innerHTML = "<div class='result'><span>Filter by category</span><select></select></div>";
 </script>
 
 </body>
