@@ -12,16 +12,19 @@
 	<div id="app">
 		<div class="result">
 			<span>Filter by category: </span>
-			<select>
-				<option> {{ option }}</option>
+			<select id="categories">
+				<option>All</option>
+				<!-- <option v-for="category in collection"> 
+					{{ category.movies.categories }}
+					{{ category.categories }}
+
+				</option> -->
 			</select>
 		</div>
 
 		<div class="result-list">
-			<ul>
-				<li v-for="movie in movies">
-					{{ movie.title }}
-				</li>
+			<ul id="titles">
+				
 			</ul>
 		</div>
 
@@ -37,21 +40,129 @@
 
 
 <script>
-	
-	new Vue({
-	  el: '#app',
-	  data: {
 
-	  	option: "text",
-	  	movies: [
-	      { title: 'Learn JavaScript' },
-	      { title: 'Learn Vue' },
-	      { title: 'Build something awesome' }
-	    ]
-    }
-  
-})
-	//document.getElementById("app").innerHTML = "<div class='result'><span>Filter by category</span><select></select></div>";
+	var jsonURL = 'http://kexe.dk/dummydata/getlist/';
+	var jsonData = [];
+
+
+	var request = new XMLHttpRequest();
+	request.open('GET', jsonURL, true);
+
+	request.onload = function() {
+	  if (request.status >= 200 && request.status < 400) {
+	    // Success!
+	    console.log("Succes");
+	    jsonData = JSON.parse(request.responseText);	
+
+	    renderMovieTitles(jsonData.movies);
+	    renderMovieCategories(jsonData.categories);	
+	    getMovieTitle(jsonData.movies); 
+
+
+	  } else {
+	    // We reached our target server, but it returned an error
+	    console.log("Error");
+	  }	  
+	};
+
+	function renderMovieTitles(movieTitles){
+		var movieList = document.getElementById("titles");	
+
+		movieList.innerHTML = "";
+
+		for ( var i = 0; i < movieTitles.length; i++) {
+
+			var movieTitle = movieTitles[i].title;
+			var listItem = document.createElement("LI");
+			var listText = document.createTextNode(movieTitle);
+			var attr = document.createAttribute("data-category");  
+			attr.value = movieTitles[i].categories;
+			listItem.setAttributeNode(attr);       
+			listItem.appendChild(listText);
+			movieList.appendChild(listItem);
+		}			
+	}
+
+	function renderMovieCategories(categories){
+		var categoryList = document.getElementById("categories");
+
+		for ( var i = 0; i < categories.length; i++) {
+
+			var movieCategory = categories[i];
+			var categoryItem = document.createElement("OPTION");
+			var categoryText = document.createTextNode(movieCategory);
+			categoryItem.appendChild(categoryText);
+			categoryList.appendChild(categoryItem);
+		}	
+
+		categoryList.onchange = function(e){
+			filterMoviesByCategory(e.target.value);
+		}
+	}
+
+	function filterMoviesByCategory(category){
+		//Filtrere jsonData på category
+		var filteredData = [];
+
+		if ( category === 'All') {
+			filteredData = jsonData.movies;
+		} else {
+
+			for(var i = 0; i < jsonData.movies.length; i++){
+				var obj = {title: "", categories: ""};
+				var movieCategories = jsonData.movies[i].categories.split(',');
+				var match = false;
+				
+				for (var j = 0; j < movieCategories.length; j++){
+					if(movieCategories[j] === category) {
+						match = true;
+					}
+				}
+				if(match){
+					obj.title = jsonData.movies[i].title;
+					obj.categories = jsonData.movies[i].categories;
+					filteredData.push( obj )
+				}
+			}
+		}
+		// kalde render funtionen med filtreret data
+		renderMovieTitles(filteredData);
+	}
+
+	function getMovieTitle(titles) {
+
+		var clickHandler = function() { 
+		  // Your click handler
+		  console.log("getMovieTitle succes!")
+		};
+
+
+		for(var i = 0; i < titles.length; i++) {
+			var currentTitle = titles[i].title;
+			console.log(currentTitle);	
+
+			//currentTitle.addEventListener('click', clickHandler, false);
+		} 
+		var anchors = document.getElementsByTagName('li');
+		for(var z = 0; z < anchors.length; z++) {
+		    var elem = anchors[z];   
+		    elem.addEventListener('click', function() { 
+		    	console.log("Blaaaaaaaaaaa")
+		     }, false);
+		}
+		currentTitle.onclick= function() {
+			 console.log("getMovieTitle succes!");
+		}
+	}
+
+
+	request.onerror = function() {
+	  // There was a connection error of some sort
+	  console.log("Connection error");
+	};
+
+	request.send();
+
 </script>
 
 </body>
